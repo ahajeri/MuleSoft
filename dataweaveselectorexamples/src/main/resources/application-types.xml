@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="inputFile" format="json">
+      <types:shape format="weave" example="input.json"><![CDATA[%dw 2.0
+type inputFile = {|
+  id: String, 
+  "type": String, 
+  name: String, 
+  ppu: Number {"typeId": "double"}, 
+  batters: {|
+    batter: Array<{|
+      id: String, 
+      "type": String
+    |}>
+  |}, 
+  topping: Array<{|
+    id: String, 
+    "type": String
+  |}>
+|} {"MetadataFormat": "json",
+"example": "{\"id\":\"0001\",\"type\":\"donut\",\"name\":\"Cake\",\"ppu\":0.55,\"batters\":{\"batter\":[{\"id\":\"1001\",\"type\":\"Regular\"},{\"id\":\"1002\",\"type\":\"Chocolate\"},{\"id\":\"1003\",\"type\":\"Blueberry\"},{\"id\":\"1004\",\"type\":\"Devil's Food\"}]},\"topping\":[{\"id\":\"5001\",\"type\":\"None\"},{\"id\":\"5002\",\"type\":\"Glazed\"},{\"id\":\"5005\",\"type\":\"Sugar\"},{\"id\":\"5007\",\"type\":\"Powdered Sugar\"},{\"id\":\"5006\",\"type\":\"Chocolate with Sprinkles\"},{\"id\":\"5003\",\"type\":\"Chocolate\"},{\"id\":\"5004\",\"type\":\"Maple\"}]}"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#e5685a43-ccc6-4b78-bcbd-eca9ac4c1e01">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="inputFile"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="inputFile"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>
