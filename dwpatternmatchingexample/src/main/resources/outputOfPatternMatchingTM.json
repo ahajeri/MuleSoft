@@ -1,0 +1,9 @@
+{
+  "a": false,
+  "b": {
+    "matches": true,
+    "value": "Emiliano"
+  },
+  "c": "greater than",
+  "d": "NUMBER"
+}
