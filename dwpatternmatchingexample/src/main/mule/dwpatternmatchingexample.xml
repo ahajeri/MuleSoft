@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="639757d8-6151-4bce-81e0-9dbef6dd9468" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="dwpatternmatchingexampleFlow" doc:id="82ceb8cf-8b76-406a-9a4d-9340c34b4b57" >
+		<http:listener doc:name="Listener" doc:id="9f45f727-62b1-4b60-9d6e-7e3cbc52bbd1" config-ref="HTTP_Listener_config" path="/testMap"/>
+		<ee:transform doc:name="DWPatternMatching" doc:id="cd4b0e28-2289-4e50-a21f-fff0df29d8dd" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+// case y is Number -> { 'Type': { 'NUMBER' : y} }
+{
+  a: payload.name match {
+    case str: "Emiliano" -> true
+    case Str: "test" -> false
+  },
+  b: payload.string match {
+    case str: "test" -> { "matches": false, value: str }
+    case str: "Emiliano" -> { "matches": true, value: str }
+  },
+  c: payload.number match {
+    case num if num == 4 -> "equal"
+    case num if num < 4 -> "greater than"
+    case num if num > 4 -> "less than"
+    else -> "error"
+  },
+  d: payload.number match {
+  	case is Object -> 'OBJECT'
+    case is Number -> 'NUMBER'
+    else -> 'ANOTHER TYPE'
+  }
+}
+
+
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
